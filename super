@@ -16,63 +16,63 @@ utilities.dragify = {}
 utilities.dragify.__index = utilities.dragify
 
 function utilities:drag(data)
-    assert(data, "missing data")
-    assert(data.frame ~= nil, "missing frame")
+    assert(data, "missing data")
+    assert(data.frame ~= nil, "missing frame")
 
-    data = setmetatable(data, utilities.dragify)
+    data = setmetatable(data, utilities.dragify)
 
-    local dragToggle, dragInput, dragStart, startPos
+    local dragToggle, dragInput, dragStart, startPos
 
-    if not data.canDrag then
-        data.canDrag = true
-    end
+    if not data.canDrag then
+        data.canDrag = true
+    end
 
-    data.frame.InputBegan:Connect(function(input)
-        if not data.canDrag then
-            return
-        end
+    data.frame.InputBegan:Connect(function(input)
+        if not data.canDrag then
+            return
+        end
 
-        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and cloneref(game:GetService("UserInputService")):GetFocusedTextBox() == nil then
-            dragToggle = true
-            dragStart = Vector2.new(input.Position.X, input.Position.Y)
-            startPos = data.frame.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragToggle = false
-                end
-            end)
-        end
-    end)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and cloneref(game:GetService("UserInputService")):GetFocusedTextBox() == nil then
+            dragToggle = true
+            dragStart = Vector2.new(input.Position.X, input.Position.Y)
+            startPos = data.frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragToggle = false
+                end
+            end)
+        end
+    end)
 
-    data.frame.InputChanged:Connect(function(input)
-        if not data.canDrag then
-            return
-        end
+    data.frame.InputChanged:Connect(function(input)
+        if not data.canDrag then
+            return
+        end
 
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            dragInput = input
-        end
-    end)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
 
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if not data.canDrag then
-            return
-        end
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if not data.canDrag then
+            return
+        end
 
-        if input == dragInput and dragToggle then
-            local inputPos = Vector2.new(input.Position.X, input.Position.Y)
-            local delta = inputPos - dragStart
-            local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        if input == dragInput and dragToggle then
+            local inputPos = Vector2.new(input.Position.X, input.Position.Y)
+            local delta = inputPos - dragStart
+            local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 
-            if data.dragSpeed and typeof(data.dragSpeed) == "number" then
-                game:GetService("TweenService"):Create(data.frame, TweenInfo.new(data.dragSpeed), {["Position"] = position}):Play()
-            else
-                data.frame.Position = position
-            end
-        end
-    end)
-    
-    return data
+            if data.dragSpeed and typeof(data.dragSpeed) == "number" then
+                game:GetService("TweenService"):Create(data.frame, TweenInfo.new(data.dragSpeed), {["Position"] = position}):Play()
+            else
+                data.frame.Position = position
+            end
+        end
+    end)
+    
+    return data
 end
 
 local localPlayer = players.LocalPlayer
@@ -150,16 +150,6 @@ function library:createWindow(data)
 
 	window.__object = ui:Clone()
 	window.__object.hide.Visible = false
-
-	-- [+] Added background image
-	local bgImage = Instance.new("ImageLabel")
-	bgImage.Name = "BackgroundImage"
-	bgImage.Image = "rbxassetid://10590477450"
-	bgImage.ScaleType = Enum.ScaleType.Stretch
-	bgImage.Size = UDim2.new(1, 0, 1, 0)
-	bgImage.BackgroundTransparency = 1
-	bgImage.ZIndex = 0
-	bgImage.Parent = window.__object.main
 
 	if mobile then
 		window.__object.hide.Visible = true
@@ -361,13 +351,13 @@ function library.window:createTab(data)
 
 	tab.__object = self.__object.main.theme.tabs.example:Clone()
 	tab.__object.Parent = self.__object.main.theme.tabs
-    tab.__object.Name = tab.text
+    tab.__object.Name = tab.text
 
 	tab.__object.Visible = false
 
 	tab.__tabObject = self.__object.main.theme.tabButtons.ScrollingFrame.example:Clone()
 	tab.__tabObject.Text = tab.text
-    tab.__tabObject.Name = tab.text
+    tab.__tabObject.Name = tab.text
 
 	tab.__tabObject.Parent = self.__object.main.theme.tabButtons.ScrollingFrame
 	tab.__tabObject.Visible = true
@@ -832,7 +822,7 @@ function library.tab:createDropdown(data)
 	dropdown.value = {}
 
 	local mainFrame = dropdown.window.__object.elements.mainFrame:Clone()
-    mainFrame.ZIndex = 2
+    mainFrame.ZIndex = 2
 
 	dropdown.__object = dropdown.window.__object.elements.dropdown:Clone()
 	dropdown.__object.Parent = mainFrame
@@ -919,7 +909,7 @@ function library.tab:createPlacement(data)
 
 	local placement = setmetatable(data, library.placement)
 
-    placement.window = self.window
+    placement.window = self.window
 	placement.tab = self
 	placement.value = {}
 
